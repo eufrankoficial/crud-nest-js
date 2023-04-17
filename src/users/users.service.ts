@@ -3,25 +3,17 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
 
   constructor(
-    @Inject('USERS_REPOSITORY')
-    private usersRepository: Repository<User>,
+    private usersRepository: UsersRepository,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = this.usersRepository.create(createUserDto)
-    
-    await this.usersRepository.save(
-      user
-    );
-
-    return this.findBy(
-      {email: createUserDto.email}
-    );
+    return this.usersRepository.createUser(createUserDto)
   }
 
   findAll() {
